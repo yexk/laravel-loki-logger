@@ -9,8 +9,8 @@ class LokiConnector
     public static function Log(string $serverPath, ?string $username, ?string $password, array $logTexts)
     {
         $http = Http::withBasicAuth(
-            $username,
-            $password
+            $username ?? '',
+            $password ?? ''
         );
         foreach($logTexts as $log)
         {
