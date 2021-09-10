@@ -2,7 +2,7 @@
     "name": "barexammasters/laravel-loki-logger",
     "description": "Laravel package for logging with Loki",
     "type": "library",
-    "license": "GNU General Public License v3.0",
+    "license": "GPL-3.0-only",
     "authors": [
         {
             "name": "Raul Ruiz",
