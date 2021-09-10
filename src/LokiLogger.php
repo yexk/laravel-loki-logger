@@ -59,7 +59,7 @@ class LokiLogger implements HandlerInterface
 
         if($this->hasError || $this->method == 'instant')
         {
-            LokiConnector::Log(
+            return LokiConnector::Log(
                 config('lokilogging.loki.server') . "/loki/api/v1/push",
                 config('lokilogging.loki.username'),
                 config('lokilogging.loki.password'),
