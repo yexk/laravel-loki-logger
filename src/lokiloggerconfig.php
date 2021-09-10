@@ -5,6 +5,7 @@ return [
         'type' => '{level_name}'
     ],
     'format' => env('LOG_FORMAT', '[{level_name}] {message}'),
+    'method' => env('LOG_METHOD', 'instant'), //other option is file
     'loki' => [
         'server' => env('LOG_SERVER', 'https://localhost'),
         'username' => env('LOG_USERNAME', null),

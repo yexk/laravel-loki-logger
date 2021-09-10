@@ -2,6 +2,7 @@
 
 namespace Barexammasters\LaravelLokiLogger;
 
+use Exception;
 use Monolog\Handler\HandlerInterface;
 
 class LokiLogger implements HandlerInterface
@@ -14,18 +15,23 @@ class LokiLogger implements HandlerInterface
     private $context;
     /** @var string */
     private $format;
+    /** @var string */
+    private $method;
 
-    public function __construct(string $format = '[{level_name}] {message}', array $context = [])
+    public function __construct(string $format = '[{level_name}] {message}', array $context = [], string $method = 'instant')
     {
         $this->format = config('lokilogging.format');
         $this->context = config('lokilogging.context');
+        $this->method = config('lokilogging.method');
 
-        $file = storage_path(LokiLoggerServiceProvider::LOG_LOCATION);
-        if (!file_exists($file)) {
-            touch($file);
+        if($this->method == 'file')
+        {
+            $file = storage_path(LokiLoggerServiceProvider::LOG_LOCATION);
+            if (!file_exists($file)) {
+                touch($file);
+            }
+            $this->file = fopen($file, 'a');
         }
-        $this->file = fopen($file, 'a');
-        register_shutdown_function([$this, 'flush']);
     }
 
     /**
@@ -50,30 +56,41 @@ class LokiLogger implements HandlerInterface
                 unset($tags[$tag]);
             }
         }
-        return fwrite($this->file, json_encode([
+
+        if($this->hasError || $this->method == 'instant')
+        {
+            LokiConnector::Log(
+                config('lokilogging.loki.server') . "/loki/api/v1/push",
+                config('lokilogging.loki.username'),
+                config('lokilogging.loki.password'),
+                [
+                    'streams' => [[
+                        'stream' => $tags,
+                        'values' => [[
+                            strval(now()->getPreciseTimestamp() * 1000),
+                            $message
+                        ]]
+                    ]]
+                ]
+            );
+        }
+        else if($this->method == 'file')
+        {
+            return fwrite($this->file, json_encode([
                 'time' => now()->getPreciseTimestamp(),
                 'tags' => $tags,
                 'message' => $message
             ]) . "\n");
+        }
+        else {
+            throw new Exception('Unrecognized log method');
+        }
     }
 
     public function handleBatch(array $records): void
     {
         foreach ($records as $record) {
             $this->handle($record);
-        }
-    }
-
-    public function handleDirectWrite()
-    {
-        
-    }
-
-    public function flush($force = false): void
-    {
-        if ($this->hasError || $force) {
-            $persister = new LokiLoggerPersister();
-            $persister->handle();
         }
     }
 

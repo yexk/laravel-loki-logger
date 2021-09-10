@@ -21,15 +21,13 @@ class LokiLoggerPersister extends Command
         $messages = explode("\n", $content);
         if (count($messages) === 0) return;
 
-        $http = Http::withBasicAuth(
-            config('lokilogging.loki.username'),
-            config('lokilogging.loki.password')
-        );
-        $path = config('lokilogging.loki.server') . "/loki/api/v1/push";
-        foreach ($messages as $message) {
+        $decodedLogs = array();
+
+        foreach($messages as $message)
+        {
             if ($message === "") continue;
             $data = json_decode($message);
-            $resp = $http->post($path, [
+            $decodedLogs[] = [
                 'streams' => [[
                     'stream' => $data->tags,
                     'values' => [[
@@ -37,7 +35,14 @@ class LokiLoggerPersister extends Command
                         $data->message
                     ]]
                 ]]
-            ]);
+            ];
         }
+
+        LokiConnector::Log(
+            config('lokilogging.loki.server') . "/loki/api/v1/push",
+            config('lokilogging.loki.username'),
+            config('lokilogging.loki.password'),
+            $decodedLogs
+        );
     }
 }
