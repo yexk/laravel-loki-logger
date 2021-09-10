@@ -12,7 +12,6 @@ class LokiConnector
             $username,
             $password
         );
-
         foreach($logTexts as $log)
         {
             $response = $http->post($serverPath, $log);
