@@ -1,6 +1,6 @@
 <?php
 
-namespace Barexammasters\LaravelLokiLogger;
+namespace yexk\LokiLogger;
 
 use Illuminate\Support\ServiceProvider;
 

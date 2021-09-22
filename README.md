@@ -4,7 +4,7 @@ _Laravel package for logging with Loki_
 Forked from https://github.com/devcake-deventer/laravel-loki-logging
 
 ## Usage
-1. Install this package: `composer require barexammasters/laravel-loki-logger`
+1. Install this package: `composer require yexk/laravel-loki-logger`
 2. Publish the configuration: `php artisan vendor:publish --tag=laravel-loki-logger
 3. Create a new log channel in `config/logging.php`:
    ```php

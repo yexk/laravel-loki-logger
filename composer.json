@@ -1,12 +1,12 @@
 {
-    "name": "barexammasters/laravel-loki-logger",
+    "name": "yexk/laravel-loki-logger",
     "description": "Laravel package for logging with Loki",
     "type": "library",
     "license": "GPL-3.0-only",
     "authors": [
         {
-            "name": "Raul Ruiz",
-            "email": "raul@barexammasters.com"
+            "name": "yexk",
+            "email": "yexk@yexk.cn"
         }
     ],
     "require": {
@@ -18,13 +18,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Barexammasters\\LaravelLokiLogger\\": "src/"
+            "yexk\\LokiLogger\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Barexammasters\\LaravelLokiLogger\\LokiLoggerServiceProvider"
+                "yexk\\LokiLogger\\LokiLoggerServiceProvider"
             ]
         }
     }

@@ -1,9 +1,8 @@
 <?php
 
-namespace Barexammasters\LaravelLokiLogger;
+namespace yexk\LokiLogger;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 
 class LokiLoggerPersister extends Command
 {
@@ -23,11 +22,10 @@ class LokiLoggerPersister extends Command
 
         $decodedLogs = array();
 
-        foreach($messages as $message)
-        {
+        foreach ($messages as $message) {
             if ($message === "") continue;
             $data = json_decode($message);
-            $decodedLogs[] = [
+            $decodedLogs = [
                 'streams' => [[
                     'stream' => $data->tags,
                     'values' => [[
@@ -36,13 +34,13 @@ class LokiLoggerPersister extends Command
                     ]]
                 ]]
             ];
-        }
 
-        LokiConnector::Log(
-            config('lokilogging.loki.server') . "/loki/api/v1/push",
-            config('lokilogging.loki.username'),
-            config('lokilogging.loki.password'),
-            $decodedLogs
-        );
+            LokiConnector::log(
+                config('lokilogging.loki.server') . "/loki/api/v1/push",
+                config('lokilogging.loki.username'),
+                config('lokilogging.loki.password'),
+                $decodedLogs
+            );
+        }
     }
 }

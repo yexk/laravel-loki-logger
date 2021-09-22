@@ -1,6 +1,6 @@
 <?php
 
-namespace Barexammasters\LaravelLokiLogger;
+namespace yexk\LokiLogger;
 
 use Exception;
 use Monolog\Handler\HandlerInterface;
@@ -24,8 +24,7 @@ class LokiLogger implements HandlerInterface
         $this->context = config('lokilogging.context');
         $this->method = config('lokilogging.method');
 
-        if($this->method == 'file')
-        {
+        if ($this->method == 'file') {
             $file = storage_path(LokiLoggerServiceProvider::LOG_LOCATION);
             if (!file_exists($file)) {
                 touch($file);
@@ -57,9 +56,8 @@ class LokiLogger implements HandlerInterface
             }
         }
 
-        if($this->hasError || $this->method == 'instant')
-        {
-            return LokiConnector::Log(
+        if ($this->hasError || $this->method == 'instant') {
+            return LokiConnector::log(
                 config('lokilogging.loki.server') . "/loki/api/v1/push",
                 config('lokilogging.loki.username'),
                 config('lokilogging.loki.password'),
@@ -67,22 +65,19 @@ class LokiLogger implements HandlerInterface
                     'streams' => [[
                         'stream' => $tags,
                         'values' => [[
-                            strval(now()->getPreciseTimestamp() * 1000),
+                            '' . number_format(now()->getPreciseTimestamp() * 1000, 0, '', ''),
                             $message
                         ]]
                     ]]
                 ]
             );
-        }
-        else if($this->method == 'file')
-        {
+        } else if ($this->method == 'file') {
             return fwrite($this->file, json_encode([
                 'time' => now()->getPreciseTimestamp(),
                 'tags' => $tags,
                 'message' => $message
             ]) . "\n");
-        }
-        else {
+        } else {
             throw new Exception('Unrecognized log method');
         }
     }
