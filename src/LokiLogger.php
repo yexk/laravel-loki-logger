@@ -1,6 +1,6 @@
 <?php
 
-namespace yexk\LokiLogger;
+namespace Yexk\LokiLogger;
 
 use Exception;
 use Monolog\Handler\HandlerInterface;

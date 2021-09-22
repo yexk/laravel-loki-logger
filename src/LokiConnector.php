@@ -1,6 +1,6 @@
 <?php
 
-namespace yexk\LokiLogger;
+namespace Yexk\LokiLogger;
 
 use Illuminate\Support\Facades\Http;
 

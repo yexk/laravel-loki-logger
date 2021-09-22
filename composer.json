@@ -18,13 +18,13 @@
     },
     "autoload": {
         "psr-4": {
-            "yexk\\LokiLogger\\": "src/"
+            "Yexk\\LokiLogger\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "yexk\\LokiLogger\\LokiLoggerServiceProvider"
+                "Yexk\\LokiLogger\\LokiLoggerServiceProvider"
             ]
         }
     }
